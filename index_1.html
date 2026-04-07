@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiMSHAD — Visual Storyteller</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#0d0d0d;--surface:#141414;--card:#181818;--text:#eeebe5;--muted:#888480;--dim:#4a4845;--border:#222;--nav-bg:rgba(13,13,13,0.92);--gutter:3rem;--max:1060px;}
+[data-theme="light"]{--bg:#f5f3ef;--surface:#ececea;--card:#e6e4e0;--text:#141210;--muted:#6b6764;--dim:#a8a5a2;--border:#d8d5d0;--nav-bg:rgba(245,243,239,0.92);}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;transition:background .3s,color .3s;}
+.cursor-glow{pointer-events:none;position:fixed;z-index:9999;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(238,235,229,.04) 0%,transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen;}
+.wrap{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 var(--gutter);height:3.8rem;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s;}
+.nav-logo{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.1em;color:var(--text);text-decoration:none;justify-self:start;transition:font-size .4s,letter-spacing .4s,color .4s,padding .4s,border-color .4s;}
+.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex;align-items:center;justify-content:flex-end;}
+.theme-toggle{width:2rem;height:2rem;border:1px solid var(--border);background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.8rem;transition:all .2s;}
+.theme-toggle:hover{border-color:var(--text);color:var(--text);}
+nav.scrolled{grid-template-columns:auto 1fr auto;gap:1.5rem;}
+nav.scrolled .nav-logo{font-size:.7rem;letter-spacing:.14em;color:var(--dim);padding-right:1.5rem;border-right:1px solid var(--border);}
+nav.scrolled .nav-links{justify-content:flex-start;}
+
+.hero{min-height:100vh;display:flex;align-items:flex-end;padding-bottom:5rem;padding-top:8rem;border-bottom:1px solid var(--border);overflow:hidden;}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);margin-bottom:2rem;}
+.hero-name{font-family:'Syne',sans-serif;font-size:clamp(5rem,10vw,9rem);font-weight:800;line-height:.9;letter-spacing:-.02em;margin-bottom:2rem;will-change:transform;}
+.hero-name em{font-style:normal;color:var(--dim);}
+.hero-tagline{font-size:1rem;font-weight:300;color:var(--muted);max-width:460px;line-height:1.8;margin-bottom:3rem;will-change:transform;}
+.hero-actions{display:flex;gap:1rem;margin-bottom:4rem;}
+.btn-s{padding:.85rem 2.2rem;background:var(--text);color:var(--bg);border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-block;transition:all .3s;}
+.btn-s:hover{opacity:.85;}
+.btn-o{padding:.85rem 2.2rem;border:1px solid var(--border);color:var(--muted);background:transparent;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:inline-block;transition:all .2s;}
+.btn-o:hover{border-color:var(--text);color:var(--text);}
+.hero-stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:3rem;border-top:1px solid var(--border);padding-top:2rem;}
+.stat-n{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;}
+.stat-l{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:.2rem;}
+
+.marquee{overflow:hidden;border-bottom:1px solid var(--border);padding:.9rem 0;background:var(--surface);}
+.marquee-inner{display:flex;gap:3rem;animation:scroll 22s linear infinite;width:max-content;}
+.m-item{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:3rem;}
+.m-item::after{content:'✦';color:var(--border);font-size:.55rem;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.section{padding:5rem 0;}
+.section-alt{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.s-tag{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;}
+.s-tag::before{content:'';width:1.2rem;height:1px;background:var(--dim);}
+.s-h{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-.01em;margin-bottom:1.2rem;}
+.click-hint{display:flex;align-items:center;gap:.7rem;margin-bottom:2rem;font-size:.72rem;color:var(--dim);}
+.click-hint-icon{width:1.6rem;height:1.6rem;border:1px solid var(--dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+
+.disc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.disc-card{background:var(--card);padding:2rem;cursor:pointer;display:flex;flex-direction:column;gap:1.5rem;opacity:0;transform:translateY(20px);transition:background .2s,opacity .5s,transform .5s;}
+.disc-card.card-visible{opacity:1;transform:none;}
+.disc-card:hover{background:var(--surface);}
+.disc-card.active{background:var(--text);}
+.disc-card.active .dc-num,.disc-card.active .dc-arrow,.disc-card.active .dc-stat-label{color:rgba(13,13,13,.4);}
+[data-theme="light"] .disc-card.active .dc-num,[data-theme="light"] .disc-card.active .dc-arrow,[data-theme="light"] .disc-card.active .dc-stat-label{color:rgba(245,243,239,.5);}
+.disc-card.active .dc-title,.disc-card.active .dc-stat-val{color:var(--bg);}
+.dc-top{display:flex;justify-content:space-between;}
+.dc-num{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;color:var(--dim);letter-spacing:.1em;}
+.dc-arrow{font-size:1rem;color:var(--dim);transition:transform .2s;}
+.disc-card:hover .dc-arrow,.disc-card.active .dc-arrow{transform:rotate(45deg);}
+.dc-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;color:var(--muted);line-height:1.2;transition:color .2s;}
+.disc-card:hover .dc-title{color:var(--text);}
+.dc-stats{display:flex;gap:1.5rem;margin-top:auto;}
+.dc-stat-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);}
+.dc-stat-label{font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+
+.detail-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease;overflow:hidden;}
+.detail-panel.visible{display:grid;grid-template-rows:1fr;border-top:1px solid var(--border);}
+.dp-inner{overflow:hidden;opacity:0;transform:translateY(8px);transition:opacity .35s ease .1s,transform .35s ease .1s;}
+.detail-panel.visible .dp-inner{padding:3rem 0;}
+.detail-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.detail-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:1.2rem;}
+.detail-desc{font-size:.88rem;font-weight:300;color:var(--text);line-height:1.85;}
+.detail-desc p+p{margin-top:.85rem;}
+.dm-row{padding:.85rem 0;border-bottom:1px solid var(--border);}
+.dm-key{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem;}
+.dm-val{font-size:.82rem;color:var(--text);}
+.cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:1.8rem;}
+.cta-cell{background:var(--card);padding:1rem 1.2rem;text-decoration:none;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:.8rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;font-family:'DM Sans',sans-serif;}
+.cta-cell:hover{background:var(--surface);}
+.cta-arr{font-size:.85rem;color:var(--dim);transition:transform .2s,color .2s;flex-shrink:0;}
+.cta-cell:hover .cta-arr{transform:translate(2px,-2px);color:var(--text);}
+.cta-cell.full{grid-column:1/-1;}
+.client-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:.9rem 0;border-top:1px solid var(--border);margin-top:1.5rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
+.client-toggle:hover{color:var(--text);}
+.ct-icon{font-size:.9rem;transition:transform .25s;}
+.client-toggle.open .ct-icon{transform:rotate(45deg);}
+.client-list{display:none;flex-direction:column;gap:1px;background:var(--border);}
+.client-list.visible{display:flex;}
+.client-row{background:var(--card);padding:1.1rem 1.2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;}
+.cr-name{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:.15rem;}
+.cr-type{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem;}
+.cr-desc{font-size:.76rem;color:var(--muted);font-weight:300;line-height:1.5;}
+.cr-stat{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;color:var(--text);white-space:nowrap;text-align:right;}
+.cr-stat-l{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);text-align:right;}
+.film-sub-title{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem;margin-top:2rem;padding-top:2rem;border-top:1px solid var(--border);}
+.film-rows{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.film-row{background:var(--card);display:grid;grid-template-columns:4.5rem 1fr auto;gap:2rem;align-items:center;padding:1.4rem;}
+.film-yr{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--border);line-height:1;}
+.film-ttl{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:.2rem;}
+.film-role{font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);}
+.film-note{font-size:.75rem;color:var(--muted);margin-top:.3rem;font-weight:300;line-height:1.5;}
+.fbadge{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:1px solid var(--border);color:var(--dim);white-space:nowrap;align-self:flex-start;}
+.fbadge.sel{border-color:var(--text);color:var(--text);}
+
+/* ── BACKGROUND: 3-col ── */
+.bg-grid{display:grid;grid-template-columns:1.1fr 1fr 0.9fr;gap:3rem;align-items:start;}
+.about-text{font-size:.87rem;font-weight:300;color:var(--text);line-height:1.9;}
+.about-text p+p{margin-top:.8rem;}
+.about-text strong{font-weight:700;border-bottom:1px solid var(--dim);padding-bottom:1px;}
+/* skills as clean table, no icon boxes */
+.skills-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:0;}
+.sk-row{display:grid;grid-template-columns:2.4rem 1fr auto;gap:.6rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border);}
+.sk-row:last-child{border-bottom:none;}
+.sk-abbr{font-family:'Syne',sans-serif;font-size:.65rem;font-weight:800;color:var(--dim);}
+.sk-name{font-size:.8rem;color:var(--text);}
+.sk-cat{font-size:.62rem;color:var(--dim);text-align:right;}
+.lang-block{border:1px solid var(--border);padding:.9rem 1rem;}
+.lang-block-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.7rem;}
+.lang-item{display:flex;justify-content:space-between;align-items:baseline;padding:.35rem 0;border-bottom:1px solid var(--border);}
+.lang-item:last-child{border-bottom:none;}
+.lang-name{font-size:.82rem;color:var(--text);}
+.lang-score{font-size:.72rem;color:var(--muted);}
+
+.resume-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid var(--border);}
+.r-title{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:1px solid var(--border);}
+.r-item{padding:.7rem 0;border-bottom:1px solid var(--border);}
+.r-item:last-child{border-bottom:none;}
+.r-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.1rem;gap:1rem;}
+.r-name{font-size:.85rem;font-weight:500;color:var(--text);cursor:pointer;border-bottom:1px dashed var(--dim);background:none;border-left:none;border-right:none;border-top:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;}
+.r-name:hover{border-bottom-color:var(--text);}
+.r-name-plain{font-size:.85rem;font-weight:500;color:var(--text);}
+.r-date{font-size:.68rem;color:var(--dim);white-space:nowrap;flex-shrink:0;}
+.r-sub{font-size:.72rem;color:var(--muted);margin-bottom:.1rem;}
+.r-desc{font-size:.72rem;color:var(--muted);font-weight:300;line-height:1.6;}
+.award-row{display:flex;gap:1rem;align-items:flex-start;padding:.6rem 0;border-bottom:1px solid var(--border);}
+.award-row:last-child{border-bottom:none;}
+.aw-n{font-family:'Syne',sans-serif;font-size:.65rem;color:var(--dim);width:1.2rem;flex-shrink:0;}
+.aw-name{font-size:.8rem;color:var(--text);}
+.aw-ctx{font-size:.7rem;color:var(--dim);}
+
+/* ── CONTACT: no dead space ── */
+.contact-head{display:grid;grid-template-columns:1fr auto;gap:4rem;align-items:end;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border);}
+.contact-h{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:800;line-height:1.05;}
+.contact-sub{font-size:.85rem;font-weight:300;color:var(--muted);max-width:240px;line-height:1.75;text-align:right;}
+/* email + form side by side, email stretches to match form */
+.contact-body{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:stretch;}
+.c-email-cell{background:var(--border);display:flex;}
+.c-link{display:flex;justify-content:space-between;align-items:flex-start;padding:1rem 1.2rem;background:var(--bg);text-decoration:none;color:var(--text);transition:background .15s;flex:1;gap:1rem;}
+.c-link:hover{background:var(--surface);}
+.c-lbl{font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem;}
+.c-val{font-size:.82rem;word-break:break-all;}
+.c-arr{color:var(--dim);font-size:.8rem;flex-shrink:0;}
+.c-form{display:flex;flex-direction:column;gap:.85rem;}
+.f-grp{display:flex;flex-direction:column;gap:.3rem;}
+.f-lbl{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);}
+.f-inp,.f-ta{background:transparent;border:1px solid var(--border);color:var(--text);padding:.7rem .9rem;font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;resize:none;width:100%;}
+.f-inp:focus,.f-ta:focus{border-color:var(--muted);}
+.f-inp::placeholder,.f-ta::placeholder{color:var(--dim);}
+.f-ta{height:100px;}
+.f-btn{padding:.75rem 2rem;background:var(--text);color:var(--bg);border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;align-self:flex-start;transition:all .3s;}
+.f-btn:hover{opacity:.85;}
+
+.links-bar{border-top:1px solid var(--border);background:var(--surface);}
+.links-bar-label{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:.9rem var(--gutter) .45rem;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);display:block;}
+.links-grid-outer{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter);}
+.links-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border);}
+.link-cell{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:.8rem 1rem;background:var(--surface);text-decoration:none;color:var(--muted);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s,color .2s;gap:.6rem;}
+.link-cell:hover{background:var(--card);color:var(--text);}
+.link-cell svg{width:12px;height:12px;fill:currentColor;opacity:.5;transition:opacity .2s;}
+.link-cell:hover svg{opacity:1;}
+.lc-bot{display:flex;align-items:center;justify-content:space-between;width:100%;}
+.lc-arr{font-size:.65rem;color:var(--dim);transition:transform .2s,color .2s;}
+.link-cell:hover .lc-arr{transform:translate(2px,-2px);color:var(--text);}
+
+footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
+.ft-inner{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+.ft-logo{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:800;letter-spacing:.08em;color:var(--dim);}
+.ft-copy{font-size:.68rem;color:var(--dim);}
+.fade{opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s;}
+.fade.in{opacity:1;transform:none;}
+
+</style>
+</head>
+<body>
+<div class="cursor-glow" id="cg"></div>
+<nav id="mainNav">
+  <a class="nav-logo" href="#hero">MIMSHAD</a>
+  <ul class="nav-links"><li><a href="#work">Work</a></li><li><a href="#background">Background</a></li><li><a href="#contact">Contact</a></li></ul>
+  <div class="nav-right"><button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9728;</button></div>
+</nav>
+
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow fade">Visual Storyteller — Design · Film · Motion</div>
+    <h1 class="hero-name fade" id="heroName">MiM<br><em>SHAD</em></h1>
+    <p class="hero-tagline fade" id="heroTag">MohammadMahdi Shadegan. Working across graphic design, filmmaking, and moving image.</p>
+    <div class="hero-actions fade"><a class="btn-s" href="#work">See My Work</a><a class="btn-o" href="#background">Background</a></div>
+    <div class="hero-stats fade">
+      <div><div class="stat-n" data-count="1000" data-suffix="+">0</div><div class="stat-l">Projects</div></div>
+      <div><div class="stat-n" data-count="5" data-suffix="+">0</div><div class="stat-l">Years</div></div>
+      <div><div class="stat-n" data-count="3" data-suffix="">0</div><div class="stat-l">Short Films</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee"><div class="marquee-inner"><div class="m-item">Graphic Design</div><div class="m-item">Filmmaking</div><div class="m-item">3D Animation</div><div class="m-item">Photography</div><div class="m-item">Video Editing</div><div class="m-item">Motion Graphics</div><div class="m-item">Visual Storytelling</div><div class="m-item">Graphic Design</div><div class="m-item">Filmmaking</div><div class="m-item">3D Animation</div><div class="m-item">Photography</div><div class="m-item">Video Editing</div><div class="m-item">Motion Graphics</div><div class="m-item">Visual Storytelling</div></div></div>
+
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="s-tag fade">Work &amp; Personal Projects</div>
+    <h2 class="s-h fade">Made &amp;<br>In Progress</h2>
+    <div class="click-hint fade"><div class="click-hint-icon">&#8595;</div>Click any card to expand</div>
+    <div class="disc-grid" id="cardGrid">
+      <div class="disc-card" data-panel="p-design" onclick="openPanel('p-design',this)"><div class="dc-top"><span class="dc-num">01</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Graphic Design</div><div class="dc-stats"><div><div class="dc-stat-val">169M+</div><div class="dc-stat-label">Views</div></div><div><div class="dc-stat-val">5M+</div><div class="dc-stat-label">Likes</div></div></div></div>
+      <div class="disc-card" data-panel="p-film" onclick="openPanel('p-film',this)"><div class="dc-top"><span class="dc-num">02</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Film &amp; Editing</div><div class="dc-stats"><div><div class="dc-stat-val">3</div><div class="dc-stat-label">Short Films</div></div><div><div class="dc-stat-val">4</div><div class="dc-stat-label">Selections</div></div></div></div>
+      <div class="disc-card" data-panel="p-3d" onclick="openPanel('p-3d',this)"><div class="dc-top"><span class="dc-num">03</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">3D Animation<br>&amp; Renders</div><div class="dc-stats"><div><div class="dc-stat-val">10+</div><div class="dc-stat-label">Animations</div></div></div></div>
+      <div class="disc-card" data-panel="p-motion" onclick="openPanel('p-motion',this)"><div class="dc-top"><span class="dc-num">04</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Motion &amp;<br>Video Editing</div><div class="dc-stats"><div><div class="dc-stat-val">2M+</div><div class="dc-stat-label">Audience</div></div></div></div>
+      <div class="disc-card" data-panel="p-personal" onclick="openPanel('p-personal',this)"><div class="dc-top"><span class="dc-num">05</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Independent<br>Projects</div><div class="dc-stats"><div><div class="dc-stat-val">2</div><div class="dc-stat-label">Active</div></div></div></div>
+      <div class="disc-card" data-panel="p-photo" onclick="openPanel('p-photo',this)"><div class="dc-top"><span class="dc-num">06</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Photography</div><div class="dc-stats"><div><div class="dc-stat-val">Sony</div><div class="dc-stat-label">Alpha 7</div></div><div><div class="dc-stat-val">Canon</div><div class="dc-stat-label">90D</div></div></div></div>
+    </div>
+
+    <div class="detail-panel" id="p-design"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Graphic Design</div><div class="detail-desc"><p>A thumbnail has one job: stop someone mid-scroll. I work on this every day, most consistently for DarkViperAU, whose GTA V channel I've designed for daily over a long-term collaboration built around CTR data and viewer response.</p><p>Beyond thumbnails: movie posters, music cover art, logos, illustrated portraits, print. Over 1,000 projects. Combined reach: 169M+ views, 5M+ likes.</p></div>
+      <div class="cta-grid"><a class="cta-cell" href="https://ytjobs.co/talent/profile/45949" target="_blank">YTJobs Profile <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/213865001" target="_blank">DarkViperAU Thumbnails <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/213863669" target="_blank">Persian Creator Work <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">Full Portfolio <span class="cta-arr">&#8599;</span></a></div>
+      <div class="client-toggle" id="ct-d" onclick="toggleClients('cl-d','ct-d')">Creators I've worked with <span class="ct-icon">+</span></div>
+      <div class="client-list" id="cl-d">
+        <div class="client-row"><div><div class="cr-name">DarkViperAU</div><div class="cr-type">Gaming · YouTube</div><div class="cr-desc">GTA V. Daily thumbnails, CTR-driven.</div></div><div><div class="cr-stat">1.8M</div><div class="cr-stat-l">Subscribers</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Donya Dadrasan</div><div class="cr-type">Music · Instagram</div><div class="cr-desc">Cover art and thumbnails for music releases.</div></div><div><div class="cr-stat">3M</div><div class="cr-stat-l">Instagram</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Anita</div><div class="cr-type">Music · YouTube</div><div class="cr-desc">Persian singer. Thumbnails and cover art.</div></div><div><div class="cr-stat">Large</div><div class="cr-stat-l">Audience</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Pixie Farnaz</div><div class="cr-type">Gaming · YouTube</div><div class="cr-desc">Thumbnails and 3D renders for Minecraft series.</div></div><div><div class="cr-stat">Large</div><div class="cr-stat-l">Audience</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Gdaal</div><div class="cr-type">Music</div><div class="cr-desc">Logo and visual identity.</div></div><div><div class="cr-stat">~1M</div><div class="cr-stat-l">Instagram</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Erfan Paydar</div><div class="cr-type">Iranian Hip-Hop</div><div class="cr-desc">Thumbnails and graphic work.</div></div><div><div class="cr-stat">2M</div><div class="cr-stat-l">Instagram</div></div></div>
+      </div></div>
+      <div><div class="dm-row"><div class="dm-key">Projects</div><div class="dm-val">1,000+</div></div><div class="dm-row"><div class="dm-key">Deliverables</div><div class="dm-val">Thumbnails · Posters · Cover Art · Logos · Print</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Photoshop · Illustrator · Lightroom</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div><div class="dm-row"><div class="dm-key">Views</div><div class="dm-val">169M+</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-film"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Film &amp; Editing</div><div class="detail-desc"><p>Three short films, different roles each time. Every cut is a decision about what the viewer feels next, not just what they see. Color grading is part of the storytelling.</p></div>
+      <div class="cta-grid"><a class="cta-cell full" href="https://www.behance.net/gallery/214767687" target="_blank">In Proximity — Editing &amp; Poster <span class="cta-arr">&#8599;</span></a><a class="cta-cell full" href="https://www.behance.net/gallery/214157525" target="_blank">Videography &amp; Film Stills <span class="cta-arr">&#8599;</span></a></div>
+      <div class="film-sub-title">Short Films</div>
+      <div class="film-rows">
+        <div class="film-row"><div class="film-yr">2024</div><div><div class="film-ttl">In Proximity</div><div class="film-role">Editor · Poster · Camera Op</div><div class="film-note">A semi-psychological film. 4x official festival selection.</div></div><span class="fbadge sel">4x Selection</span></div>
+        <div class="film-row"><div class="film-yr">2024</div><div><div class="film-ttl">Breathe</div><div class="film-role">Editor</div><div class="film-note">Directed by Parisa Esfandiary. Shot and cut in under two days.</div></div><span class="fbadge">2024</span></div>
+        <div class="film-row"><div class="film-yr">2022</div><div><div class="film-ttl">He Said...</div><div class="film-role">Co-Director · Co-Writer</div><div class="film-note">Made during Iran's 2022 unrest. Shelved.</div></div><span class="fbadge">Personal</span></div>
+      </div></div>
+      <div><div class="dm-row"><div class="dm-key">Roles</div><div class="dm-val">Editor · Co-Director · Camera Op · Poster Designer</div></div><div class="dm-row"><div class="dm-key">Equipment</div><div class="dm-val">Sony Alpha 7 · Canon EOS 90D · Canon 750D</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Premiere Pro · After Effects · DaVinci Resolve</div></div><div class="dm-row"><div class="dm-key">Festivals</div><div class="dm-val">Lift-Off Global · ARClight · Kalkari · NGO IFF</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-3d"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">3D Animation &amp; Renders</div><div class="detail-desc"><p>Minecraft-style worlds for gaming YouTubers: character animation, environment design, cinematic renders. Personal side: a LEGO-style short in Blender and Mecabricks.</p></div>
+      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/213857667" target="_blank">Minecraft Animations <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214159185" target="_blank">MakRaven Animation <span class="cta-arr">&#8599;</span></a><a class="cta-cell full" href="https://www.behance.net/gallery/214153555" target="_blank">LEGO Personal Project <span class="cta-arr">&#8599;</span></a></div></div>
+      <div><div class="dm-row"><div class="dm-key">Clients</div><div class="dm-val">DarkViperAU · PixieFarnazGaming · MakRaven</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Blender · Maya · 3ds Max · Mine-imator · Mecabricks</div></div><div class="dm-row"><div class="dm-key">Output</div><div class="dm-val">10+ animations</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2022 – Present</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-motion"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Motion &amp; Video Editing</div><div class="detail-desc"><p>Commercial edits, social content, event reels, motion graphics. Clients include Mobonews (2M+) and Hamedan's School of Fine Arts.</p></div>
+      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/214164997" target="_blank">Fine Arts Motion Graphic <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214157525" target="_blank">Videography Samples <span class="cta-arr">&#8599;</span></a></div></div>
+      <div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Premiere Pro · After Effects · DaVinci Resolve</div></div><div class="dm-row"><div class="dm-key">Clients</div><div class="dm-val">Mobonews (2M+) · Fine Arts School · Various</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-personal"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Independent Projects</div><div class="detail-desc"><p><strong style="font-weight:600">In Search of Art</strong> — what actually makes something great? Interviews cut against cinematic B-roll. Lives on mim.sight.</p><p><strong style="font-weight:600">LEGO Animated Short</strong> — personal film in 3D LEGO style, built in Blender and Mecabricks. On Behance.</p></div>
+      <div class="cta-grid"><a class="cta-cell" href="https://www.youtube.com/@mimsight" target="_blank">mim.sight on YouTube <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214153555" target="_blank">LEGO Film on Behance <span class="cta-arr">&#8599;</span></a></div></div>
+      <div><div class="dm-row"><div class="dm-key">In Search of Art</div><div class="dm-val">Documentary series</div></div><div class="dm-row"><div class="dm-key">LEGO Animated Short</div><div class="dm-val">Blender + Mecabricks · 2024</div></div><div class="dm-row"><div class="dm-key">Channel</div><div class="dm-val">mim.sight (YouTube &amp; Instagram)</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-photo"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Photography</div><div class="detail-desc"><p>Landscapes and portraits across Iran: the Kavir desert, long-exposure self-portraits, environmental work. Photography changed how I see — that carries into everything else.</p></div>
+      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/213845997" target="_blank">Kavir Photo Collection <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">All Photography on Behance <span class="cta-arr">&#8599;</span></a></div></div>
+      <div><div class="dm-row"><div class="dm-key">Equipment</div><div class="dm-val">Sony Alpha 7 · Canon EOS 90D · Canon 750D</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Lightroom · Photoshop</div></div><div class="dm-row"><div class="dm-key">Style</div><div class="dm-val">Landscape · Portrait · Long Exposure · Experimental</div></div></div>
+    </div></div></div>
+  </div>
+</section>
+
+<section class="section section-alt" id="background">
+  <div class="wrap">
+    <div class="s-tag fade">Education &amp; Background</div>
+    <h2 class="s-h fade">Who I Am &amp;<br>Where I Come From</h2>
+    <div class="bg-grid fade">
+      <div class="about-text">
+        <p>I'm a multidisciplinary artist from Iran. Graphic design, filmmaking, 3D animation, photography, video editing: five years of building across all of it, with one consistent thread. Every frame, every cut, every composition is a decision about what to say and how to say it.</p>
+        <p>I studied drama at the Fine Arts School of Hamedan — not the obvious background for a designer, but it's where I learned to think about an audience: what they feel, not just what they see. That instinct shapes everything I make.</p>
+        <p>Currently admitted to <strong>NHL Stenden University (Communication &amp; Multimedia Design)</strong> in the Netherlands, working toward becoming an art director and creative lead.</p>
+      </div>
+      <div>
+        <div class="skills-label">Tools &amp; Software</div>
+        <div class="sk-row"><span class="sk-abbr">Ps</span><span class="sk-name">Photoshop</span><span class="sk-cat">Design</span></div>
+        <div class="sk-row"><span class="sk-abbr">Ai</span><span class="sk-name">Illustrator</span><span class="sk-cat">Design</span></div>
+        <div class="sk-row"><span class="sk-abbr">Lr</span><span class="sk-name">Lightroom</span><span class="sk-cat">Photo</span></div>
+        <div class="sk-row"><span class="sk-abbr">Pr</span><span class="sk-name">Premiere Pro</span><span class="sk-cat">Video</span></div>
+        <div class="sk-row"><span class="sk-abbr">Ae</span><span class="sk-name">After Effects</span><span class="sk-cat">Motion</span></div>
+        <div class="sk-row"><span class="sk-abbr">Dv</span><span class="sk-name">DaVinci Resolve</span><span class="sk-cat">Color</span></div>
+        <div class="sk-row"><span class="sk-abbr">Bln</span><span class="sk-name">Blender</span><span class="sk-cat">3D</span></div>
+        <div class="sk-row"><span class="sk-abbr">Mya</span><span class="sk-name">Maya</span><span class="sk-cat">3D</span></div>
+        <div class="sk-row"><span class="sk-abbr">3ds</span><span class="sk-name">3ds Max</span><span class="sk-cat">3D</span></div>
+      </div>
+      <div>
+        <div class="lang-block">
+          <div class="lang-block-label">Language</div>
+          <div class="lang-item"><span class="lang-name">English</span><span class="lang-score">TOEFL 105</span></div>
+          <div class="lang-item"><span class="lang-name">Persian</span><span class="lang-score">Native</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="resume-grid fade">
+      <div>
+        <div class="r-title">Experience</div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-design')">Graphic Designer</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Freelance · International Clients</div><div class="r-desc">1,000+ projects. DarkViperAU (1.8M), Donya Dadrasan (3M IG), Erfan Paydar (2M IG).</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-motion')">Video Editor</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Freelance · Worldwide</div><div class="r-desc">Short films, promos, social content. Mobonews (2M+).</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-3d')">3D Animator</button><span class="r-date">2022 – Present</span></div><div class="r-sub">Freelance · Gaming YouTube</div><div class="r-desc">10+ animations in Blender, Maya, 3ds Max, and Mine-imator.</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-film')">Camera Operator</button><span class="r-date">2020 – Present</span></div><div class="r-sub">Freelance · Short Films &amp; Commercials</div><div class="r-desc">Sony Alpha 7, Canon EOS 90D, and Canon 750D.</div></div>
+      </div>
+      <div>
+        <div class="r-title">Education</div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">NHL Stenden University</span><span class="r-date">2025</span></div><div class="r-sub">Communication &amp; Multimedia Design · Leeuwarden, NL</div><div class="r-desc">Admitted. Bachelor's programme starting 2025.</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Hamedan Art School of Fine Arts</span><span class="r-date">2021–2024</span></div><div class="r-sub">Drama · GPA 4.0 (17.96/20)</div><div class="r-desc">Outstanding Student 2022.</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate — Premiere Pro</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate — Photoshop</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
+        <div class="r-title" style="margin-top:1.5rem">Recognition</div>
+        <div class="award-row"><span class="aw-n">01</span><div><div class="aw-name">Lift-Off Global Network Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">02</span><div><div class="aw-name">ARClight Student Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">03</span><div><div class="aw-name">Kalkari Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">04</span><div><div class="aw-name">NGO IFF</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">05</span><div><div class="aw-name">Outstanding Stage Reading</div><div class="aw-ctx">Hamedan Province · 2022</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="contact-head fade">
+      <h2 class="contact-h">Let's make<br>something<br>worth seeing.</h2>
+      <p class="contact-sub">Open for conversations about graphic design, film, and creative work. Available internationally.</p>
+    </div>
+    <div class="contact-body fade">
+      <div class="c-email-cell">
+        <a class="c-link" href="mailto:mohd.mahdi.shdgn@gmail.com">
+          <div><div class="c-lbl">Email</div><div class="c-val"><span class="__cf_email__" data-cfemail="137e7c7b773d7e727b777a3d607b77747d53747e727a7f3d707c7e">[email&#160;protected]</span></div></div>
+          <span class="c-arr">&#8599;</span>
+        </a>
+      </div>
+      <div class="c-form">
+        <div class="f-grp"><label class="f-lbl">Name</label><input class="f-inp" type="text" placeholder="Your name"></div>
+        <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" type="email" placeholder="your@email.com"></div>
+        <div class="f-grp"><label class="f-lbl">Message</label><textarea class="f-ta" placeholder="What's on your mind?"></textarea></div>
+        <button class="f-btn">Send &#8594;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="links-bar">
+  <span class="links-bar-label">Find me on</span>
+  <div class="links-grid-outer"><div class="links-grid">
+    <a class="link-cell" href="https://www.behance.net/mimshad" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.509 1.86 1.305 2.33.483.29 1.071.39 1.68.27.692-.14 1.14-.5 1.38-1.17h2.39zM16.05 13.5h3.44c-.08-1.174-.58-1.69-1.64-1.69-.947 0-1.55.516-1.8 1.69zM9.348 8.455c-.703 0-1.136.31-1.136.9 0 .494.268.8.803.978l1.031.322c1.184.37 1.742.987 1.742 2.076 0 1.59-1.11 2.37-3.14 2.37-.584 0-1.204-.109-1.86-.327A5.1 5.1 0 0 1 5 14.3v-1.73c.438.319.912.57 1.42.755.508.184 1.005.276 1.49.276.772 0 1.158-.26 1.158-.78 0-.461-.278-.738-.833-.831L7.2 11.682c-1.15-.362-1.724-.978-1.724-1.85 0-1.497 1.101-2.272 3.004-2.272.537 0 1.064.08 1.58.24.516.16.972.39 1.368.69v1.636c-.4-.27-.832-.49-1.295-.66-.464-.17-.924-.255-1.385-.255z"/></svg><div class="lc-bot"><span>Behance</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="https://www.instagram.com/mim.shad" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg><div class="lc-bot"><span>Instagram</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="https://www.youtube.com/@mimsight" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg><div class="lc-bot"><span>mim.sight</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="https://pinterest.com/mimshadart" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg><div class="lc-bot"><span>Pinterest</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="https://ytjobs.co/talent/profile/45949" target="_blank"><svg viewBox="0 0 24 24"><path d="M21.543 6.498C22 8.28 22 12 22 12s0 3.72-.457 5.502c-.254.985-.997 1.76-1.938 2.022C17.896 20 12 20 12 20s-5.893 0-7.605-.476c-.945-.266-1.687-1.04-1.938-2.022C2 15.72 2 12 2 12s0-3.72.457-5.502c.254-.985.997-1.76 1.938-2.022C6.107 4 12 4 12 4s5.896 0 7.605.476c.945.266 1.687 1.04 1.938 2.022zM10 15.5l6-3.5-6-3.5v7z"/></svg><div class="lc-bot"><span>YTJobs</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="mailto:mohd.mahdi.shdgn@gmail.com"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><div class="lc-bot"><span>Email</span><span class="lc-arr">&#8599;</span></div></a>
+  </div></div>
+</div>
+
+<footer><div class="ft-inner"><span class="ft-logo">MIMSHAD</span><span class="ft-copy">MohammadMahdi Shadegan · Visual Storyteller · 2025</span></div></footer>
+<script>
+// Cursor glow
+const cg = document.getElementById('cg');
+document.addEventListener('mousemove', e => {
+  cg.style.left = e.clientX + 'px';
+  cg.style.top = e.clientY + 'px';
+});
+
+// Parallax hero
+const hn = document.getElementById('heroName');
+const ht = document.getElementById('heroTag');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (hn) hn.style.transform = 'translateY(' + (y * .18) + 'px)';
+  if (ht) ht.style.transform = 'translateY(' + (y * .08) + 'px)';
+}, { passive: true });
+
+// Nav scroll state
+const nav = document.getElementById('mainNav');
+let hb = 0;
+function calcHero() {
+  const h = document.getElementById('hero');
+  if (h) hb = h.getBoundingClientRect().bottom + window.scrollY - 80;
+}
+function onScroll() {
+  nav.classList.toggle('scrolled', window.scrollY > hb);
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('load', () => { calcHero(); onScroll(); });
+window.addEventListener('resize', calcHero);
+
+// Staggered card entrance
+const cardGrid = document.getElementById('cardGrid');
+const cardObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      cardGrid.querySelectorAll('.disc-card').forEach((c, i) => {
+        setTimeout(() => c.classList.add('card-visible'), i * 90);
+      });
+      cardObs.disconnect();
+    }
+  });
+}, { threshold: .1 });
+if (cardGrid) cardObs.observe(cardGrid);
+
+// Counter animation
+function animateCounter(el) {
+  const target = parseInt(el.dataset.count);
+  const suffix = el.dataset.suffix || '';
+  const dur = 1200;
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(e * target) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(x => {
+    if (x.isIntersecting) {
+      animateCounter(x.target);
+      counterObs.unobserve(x.target);
+    }
+  });
+}, { threshold: .5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
+
+// Panel open/close
+window.openPanel = function(id, card) {
+  const all = document.querySelectorAll('.disc-card');
+  const panels = document.querySelectorAll('.detail-panel');
+  const target = document.getElementById(id);
+  const wasOpen = target.classList.contains('visible');
+  all.forEach(c => c.classList.remove('active'));
+  panels.forEach(p => {
+    p.classList.remove('visible');
+    const i = p.querySelector('.dp-inner');
+    if (i) { i.style.opacity = '0'; i.style.transform = 'translateY(8px)'; }
+  });
+  if (!wasOpen) {
+    card.classList.add('active');
+    target.classList.add('visible');
+    setTimeout(() => {
+      const i = target.querySelector('.dp-inner');
+      if (i) { i.style.opacity = '1'; i.style.transform = 'none'; }
+    }, 60);
+    setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+};
+
+// Jump to panel from background section
+window.jumpToPanel = function(id) {
+  const card = document.querySelector('[data-panel="' + id + '"]');
+  document.querySelectorAll('.disc-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('visible'));
+  if (card) card.classList.add('active');
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add('visible');
+    setTimeout(() => {
+      const i = target.querySelector('.dp-inner');
+      if (i) { i.style.opacity = '1'; i.style.transform = 'none'; }
+    }, 60);
+    setTimeout(() => document.getElementById('work').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  }
+};
+
+// Toggle client list
+window.toggleClients = function(listId, toggleId) {
+  document.getElementById(listId).classList.toggle('visible');
+  document.getElementById(toggleId).classList.toggle('open');
+};
+
+// Theme toggle
+window.toggleTheme = function() {
+  const html = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  btn.textContent = isDark ? '☾' : '☀';
+};
+
+// Fade-in on scroll
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); });
+}, { threshold: .07, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.fade').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>
