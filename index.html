@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MiMSHAD — Visual Storyteller</title>
+<title>MiMSHAD | Visual Strategist</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 
@@ -15,15 +15,19 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
 .cursor-glow{pointer-events:none;position:fixed;z-index:9999;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(238,235,229,.04) 0%,transparent 70%);transform:translate(-50%,-50%);mix-blend-mode:screen;}
 .wrap{max-width:calc(var(--max) + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter);}
 
-nav{position:fixed;top:0;left:0;right:0;z-index:200;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 var(--gutter);height:3.8rem;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s;}
+/* FIXED NAVBAR GRID AND HEIGHT */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;padding:0 var(--gutter);height:4.8rem;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s; gap: 2rem;}
 .nav-logo{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.1em;color:var(--text);text-decoration:none;justify-self:start;transition:font-size .4s,letter-spacing .4s,color .4s,padding .4s,border-color .4s;}
 .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;}
 .nav-links a{color:var(--dim);text-decoration:none;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;}
 .nav-links a:hover{color:var(--text);}
+.nav-quick-links { display: flex; gap: 1.5rem; align-items: center; justify-content: flex-end; flex: 1; }
+.nav-quick-links a { color: var(--dim); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; font-weight: 500; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 4px; }
+.nav-quick-links a:hover { color: var(--bg); background: var(--text); border-color: var(--text); }
 .nav-right{display:flex;align-items:center;justify-content:flex-end;}
 .theme-toggle{width:2rem;height:2rem;border:1px solid var(--border);background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:.8rem;transition:all .2s;}
 .theme-toggle:hover{border-color:var(--text);color:var(--text);}
-nav.scrolled{grid-template-columns:auto 1fr auto;gap:1.5rem;}
+nav.scrolled{grid-template-columns:auto 1fr auto auto;gap:1.5rem;height:4rem;}
 nav.scrolled .nav-logo{font-size:.7rem;letter-spacing:.14em;color:var(--dim);padding-right:1.5rem;border-right:1px solid var(--border);}
 nav.scrolled .nav-links{justify-content:flex-start;}
 
@@ -52,9 +56,10 @@ nav.scrolled .nav-links{justify-content:flex-start;}
 .s-tag{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;}
 .s-tag::before{content:'';width:1.2rem;height:1px;background:var(--dim);}
 .s-h{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-.01em;margin-bottom:1.2rem;}
-.click-hint{display:flex;align-items:center;gap:.7rem;margin-bottom:2rem;font-size:.72rem;color:var(--dim);}
-.click-hint-icon{width:1.6rem;height:1.6rem;border:1px solid var(--dim);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;animation:pulse 2s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+
+.click-hint{display:inline-flex;align-items:center;gap:.7rem;margin-bottom:2rem;font-size:.72rem;color:var(--text);background:var(--card);padding:.5rem 1rem;border:1px solid var(--border);border-radius:20px;}
+.click-hint-icon{width:1.6rem;height:1.6rem;background:var(--text);color:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
 
 .disc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
 .disc-card{background:var(--card);padding:2rem;cursor:pointer;display:flex;flex-direction:column;gap:1.5rem;opacity:0;transform:translateY(20px);transition:background .2s,opacity .5s,transform .5s;}
@@ -85,12 +90,14 @@ nav.scrolled .nav-links{justify-content:flex-start;}
 .dm-row{padding:.85rem 0;border-bottom:1px solid var(--border);}
 .dm-key{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem;}
 .dm-val{font-size:.82rem;color:var(--text);}
+
 .cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:1.8rem;}
-.cta-cell{background:var(--card);padding:1rem 1.2rem;text-decoration:none;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:.8rem;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s;font-family:'DM Sans',sans-serif;}
-.cta-cell:hover{background:var(--surface);}
-.cta-arr{font-size:.85rem;color:var(--dim);transition:transform .2s,color .2s;flex-shrink:0;}
-.cta-cell:hover .cta-arr{transform:translate(2px,-2px);color:var(--text);}
+.cta-cell{background:var(--surface);padding:1.2rem;text-decoration:none;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:.8rem;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;transition:all .2s;font-family:'DM Sans',sans-serif;border:1px solid transparent;}
+.cta-cell:hover{background:var(--text);color:var(--bg);}
+.cta-arr{font-size:1rem;color:var(--dim);transition:transform .2s,color .2s;flex-shrink:0;}
+.cta-cell:hover .cta-arr{transform:translate(2px,-2px);color:var(--bg);}
 .cta-cell.full{grid-column:1/-1;}
+
 .client-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:.9rem 0;border-top:1px solid var(--border);margin-top:1.5rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
 .client-toggle:hover{color:var(--text);}
 .ct-icon{font-size:.9rem;transition:transform .25s;}
@@ -113,12 +120,11 @@ nav.scrolled .nav-links{justify-content:flex-start;}
 .fbadge{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .6rem;border:1px solid var(--border);color:var(--dim);white-space:nowrap;align-self:flex-start;}
 .fbadge.sel{border-color:var(--text);color:var(--text);}
 
-/* ── BACKGROUND: 3-col ── */
 .bg-grid{display:grid;grid-template-columns:1.1fr 1fr 0.9fr;gap:3rem;align-items:start;}
 .about-text{font-size:.87rem;font-weight:300;color:var(--text);line-height:1.9;}
 .about-text p+p{margin-top:.8rem;}
 .about-text strong{font-weight:700;border-bottom:1px solid var(--dim);padding-bottom:1px;}
-/* skills as clean table, no icon boxes */
+.prof-img { width: 300px; height: 300px; object-fit: cover; border-radius: 0; margin-bottom: 2rem; border: 1px solid var(--border); }
 .skills-label{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:0;}
 .sk-row{display:grid;grid-template-columns:2.4rem 1fr auto;gap:.6rem;align-items:center;padding:.5rem 0;border-bottom:1px solid var(--border);}
 .sk-row:last-child{border-bottom:none;}
@@ -149,11 +155,9 @@ nav.scrolled .nav-links{justify-content:flex-start;}
 .aw-name{font-size:.8rem;color:var(--text);}
 .aw-ctx{font-size:.7rem;color:var(--dim);}
 
-/* ── CONTACT: no dead space ── */
 .contact-head{display:grid;grid-template-columns:1fr auto;gap:4rem;align-items:end;margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border);}
 .contact-h{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:800;line-height:1.05;}
 .contact-sub{font-size:.85rem;font-weight:300;color:var(--muted);max-width:240px;line-height:1.75;text-align:right;}
-/* email + form side by side, email stretches to match form */
 .contact-body{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:stretch;}
 .c-email-cell{background:var(--border);display:flex;}
 .c-link{display:flex;justify-content:space-between;align-items:flex-start;padding:1rem 1.2rem;background:var(--bg);text-decoration:none;color:var(--text);transition:background .15s;flex:1;gap:1rem;}
@@ -197,57 +201,92 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
 <nav id="mainNav">
   <a class="nav-logo" href="#hero">MIMSHAD</a>
   <ul class="nav-links"><li><a href="#work">Work</a></li><li><a href="#background">Background</a></li><li><a href="#contact">Contact</a></li></ul>
+  <div class="nav-quick-links">
+    <a href="https://www.behance.net/mimshad" target="_blank">Behance</a>
+    <a href="https://ytjobs.co/talent/profile/45949" target="_blank">YTJobs</a>
+  </div>
   <div class="nav-right"><button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">&#9728;</button></div>
 </nav>
 
 <section class="hero" id="hero">
   <div class="wrap">
-    <div class="hero-eyebrow fade">Visual Storyteller — Design · Film · Motion</div>
+    <div class="hero-eyebrow fade">Visual Strategist | Design · Film · Motion</div>
     <h1 class="hero-name fade" id="heroName">MiM<br><em>SHAD</em></h1>
-    <p class="hero-tagline fade" id="heroTag">MohammadMahdi Shadegan. Working across graphic design, filmmaking, and moving image.</p>
+    <p class="hero-tagline fade" id="heroTag">MohammadMahdi Shadegan. Dedicated B2B service provider executing high-volume creative workflows, performance design, and digital asset creation.</p>
     <div class="hero-actions fade"><a class="btn-s" href="#work">See My Work</a><a class="btn-o" href="#background">Background</a></div>
     <div class="hero-stats fade">
-      <div><div class="stat-n" data-count="1000" data-suffix="+">0</div><div class="stat-l">Projects</div></div>
-      <div><div class="stat-n" data-count="5" data-suffix="+">0</div><div class="stat-l">Years</div></div>
-      <div><div class="stat-n" data-count="3" data-suffix="">0</div><div class="stat-l">Short Films</div></div>
+      <div><div class="stat-n" data-count="1500" data-suffix="+">0</div><div class="stat-l">Projects</div></div>
+      <div><div class="stat-n" data-count="5" data-suffix="+">0</div><div class="stat-l">Years Exp</div></div>
+      <div><div class="stat-n" data-count="35" data-suffix="%">0</div><div class="stat-l">Workflow Speed</div></div>
     </div>
   </div>
 </section>
 
-<div class="marquee"><div class="marquee-inner"><div class="m-item">Graphic Design</div><div class="m-item">Filmmaking</div><div class="m-item">3D Animation</div><div class="m-item">Photography</div><div class="m-item">Video Editing</div><div class="m-item">Motion Graphics</div><div class="m-item">Visual Storytelling</div><div class="m-item">Graphic Design</div><div class="m-item">Filmmaking</div><div class="m-item">3D Animation</div><div class="m-item">Photography</div><div class="m-item">Video Editing</div><div class="m-item">Motion Graphics</div><div class="m-item">Visual Storytelling</div></div></div>
+<div class="marquee"><div class="marquee-inner"><div class="m-item">Thumbnail Strategy</div><div class="m-item">CTR Optimization</div><div class="m-item">A/B Split Testing</div><div class="m-item">Graphic Design</div><div class="m-item">Batch Production</div><div class="m-item">Video Editing</div><div class="m-item">3D Animation</div><div class="m-item">Thumbnail Strategy</div><div class="m-item">CTR Optimization</div><div class="m-item">A/B Split Testing</div><div class="m-item">Graphic Design</div><div class="m-item">Batch Production</div><div class="m-item">Video Editing</div><div class="m-item">3D Animation</div></div></div>
 
 <section class="section" id="work">
   <div class="wrap">
-    <div class="s-tag fade">Work &amp; Personal Projects</div>
-    <h2 class="s-h fade">Made &amp;<br>In Progress</h2>
-    <div class="click-hint fade"><div class="click-hint-icon">&#8595;</div>Click any card to expand</div>
+    <div class="s-tag fade">Work &amp; Operations</div>
+    <h2 class="s-h fade">Selected<br>Works</h2>
+    
+    <div class="click-hint fade">
+      <div class="click-hint-icon">&#8595;</div>
+      <span>Select a category below to expand details and view portfolio links</span>
+    </div>
+
     <div class="disc-grid" id="cardGrid">
-      <div class="disc-card" data-panel="p-design" onclick="openPanel('p-design',this)"><div class="dc-top"><span class="dc-num">01</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Graphic Design</div><div class="dc-stats"><div><div class="dc-stat-val">169M+</div><div class="dc-stat-label">Views</div></div><div><div class="dc-stat-val">5M+</div><div class="dc-stat-label">Likes</div></div></div></div>
-      <div class="disc-card" data-panel="p-film" onclick="openPanel('p-film',this)"><div class="dc-top"><span class="dc-num">02</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Film &amp; Editing</div><div class="dc-stats"><div><div class="dc-stat-val">3</div><div class="dc-stat-label">Short Films</div></div><div><div class="dc-stat-val">4</div><div class="dc-stat-label">Selections</div></div></div></div>
+      <div class="disc-card" data-panel="p-design" onclick="openPanel('p-design',this)"><div class="dc-top"><span class="dc-num">01</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Thumbnail Strategy<br>&amp; Design</div><div class="dc-stats"><div><div class="dc-stat-val">1500+</div><div class="dc-stat-label">Projects</div></div><div><div class="dc-stat-val">5-7%</div><div class="dc-stat-label">Avg CTR</div></div></div></div>
+      <div class="disc-card" data-panel="p-motion" onclick="openPanel('p-motion',this)"><div class="dc-top"><span class="dc-num">02</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Video Editing<br>&amp; Compositing</div><div class="dc-stats"><div><div class="dc-stat-val">2M+</div><div class="dc-stat-label">Audience</div></div></div></div>
       <div class="disc-card" data-panel="p-3d" onclick="openPanel('p-3d',this)"><div class="dc-top"><span class="dc-num">03</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">3D Animation<br>&amp; Renders</div><div class="dc-stats"><div><div class="dc-stat-val">10+</div><div class="dc-stat-label">Animations</div></div></div></div>
-      <div class="disc-card" data-panel="p-motion" onclick="openPanel('p-motion',this)"><div class="dc-top"><span class="dc-num">04</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Motion &amp;<br>Video Editing</div><div class="dc-stats"><div><div class="dc-stat-val">2M+</div><div class="dc-stat-label">Audience</div></div></div></div>
+      <div class="disc-card" data-panel="p-film" onclick="openPanel('p-film',this)"><div class="dc-top"><span class="dc-num">04</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Film Direction<br>&amp; Operation</div><div class="dc-stats"><div><div class="dc-stat-val">4</div><div class="dc-stat-label">Selections</div></div></div></div>
       <div class="disc-card" data-panel="p-personal" onclick="openPanel('p-personal',this)"><div class="dc-top"><span class="dc-num">05</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Independent<br>Projects</div><div class="dc-stats"><div><div class="dc-stat-val">2</div><div class="dc-stat-label">Active</div></div></div></div>
       <div class="disc-card" data-panel="p-photo" onclick="openPanel('p-photo',this)"><div class="dc-top"><span class="dc-num">06</span><span class="dc-arrow">&#8594;</span></div><div class="dc-title">Photography</div><div class="dc-stats"><div><div class="dc-stat-val">Sony</div><div class="dc-stat-label">Alpha 7</div></div><div><div class="dc-stat-val">Canon</div><div class="dc-stat-label">90D</div></div></div></div>
     </div>
 
     <div class="detail-panel" id="p-design"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">Graphic Design</div><div class="detail-desc"><p>A thumbnail has one job: stop someone mid-scroll. I work on this every day, most consistently for DarkViperAU, whose GTA V channel I've designed for daily over a long-term collaboration built around CTR data and viewer response.</p><p>Beyond thumbnails: movie posters, music cover art, logos, illustrated portraits, print. Over 1,000 projects. Combined reach: 169M+ views, 5M+ likes.</p></div>
-      <div class="cta-grid"><a class="cta-cell" href="https://ytjobs.co/talent/profile/45949" target="_blank">YTJobs Profile <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/213865001" target="_blank">DarkViperAU Thumbnails <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/213863669" target="_blank">Persian Creator Work <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">Full Portfolio <span class="cta-arr">&#8599;</span></a></div>
-      <div class="client-toggle" id="ct-d" onclick="toggleClients('cl-d','ct-d')">Creators I've worked with <span class="ct-icon">+</span></div>
+      <div><div class="detail-label">Thumbnail Strategy &amp; Design</div><div class="detail-desc"><p>A thumbnail has one job: stop the scroll. I specialize in high-volume, CTR-driven thumbnail design and A/B split testing. Over the past five years, I have engineered visuals for creators with millions of subscribers, including a daily output workflow for DarkViperAU and performance testing for Speeed.</p><p>I combine advanced Photoshop compositing with AI integration to iterate rapidly based on backend data, achieving an average CTR of 5% to 7% while strictly managing fast turnaround constraints.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell" href="https://ytjobs.co/talent/profile/45949" target="_blank">View YTJobs Profile <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/gallery/213865001" target="_blank">View DarkViperAU Portfolio <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/gallery/213863669" target="_blank">View Persian Creator Work <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">View Full Portfolio <span class="cta-arr">&#8599;</span></a>
+      </div>
+      <div class="client-toggle" id="ct-d" onclick="toggleClients('cl-d','ct-d')">Creators I have worked with <span class="ct-icon">+</span></div>
       <div class="client-list" id="cl-d">
-        <div class="client-row"><div><div class="cr-name">DarkViperAU</div><div class="cr-type">Gaming · YouTube</div><div class="cr-desc">GTA V. Daily thumbnails, CTR-driven.</div></div><div><div class="cr-stat">1.8M</div><div class="cr-stat-l">Subscribers</div></div></div>
-        <div class="client-row"><div><div class="cr-name">Donya Dadrasan</div><div class="cr-type">Music · Instagram</div><div class="cr-desc">Cover art and thumbnails for music releases.</div></div><div><div class="cr-stat">3M</div><div class="cr-stat-l">Instagram</div></div></div>
-        <div class="client-row"><div><div class="cr-name">Anita</div><div class="cr-type">Music · YouTube</div><div class="cr-desc">Persian singer. Thumbnails and cover art.</div></div><div><div class="cr-stat">Large</div><div class="cr-stat-l">Audience</div></div></div>
-        <div class="client-row"><div><div class="cr-name">Pixie Farnaz</div><div class="cr-type">Gaming · YouTube</div><div class="cr-desc">Thumbnails and 3D renders for Minecraft series.</div></div><div><div class="cr-stat">Large</div><div class="cr-stat-l">Audience</div></div></div>
-        <div class="client-row"><div><div class="cr-name">Gdaal</div><div class="cr-type">Music</div><div class="cr-desc">Logo and visual identity.</div></div><div><div class="cr-stat">~1M</div><div class="cr-stat-l">Instagram</div></div></div>
-        <div class="client-row"><div><div class="cr-name">Erfan Paydar</div><div class="cr-type">Iranian Hip-Hop</div><div class="cr-desc">Thumbnails and graphic work.</div></div><div><div class="cr-stat">2M</div><div class="cr-stat-l">Instagram</div></div></div>
+        <div class="client-row"><div><div class="cr-name">DarkViperAU</div><div class="cr-type">Gaming · YouTube</div><div class="cr-desc">GTA V. Daily thumbnails, CTR-driven.</div></div><div><div class="cr-stat">2.2M</div><div class="cr-stat-l">Subscribers</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Speeed</div><div class="cr-type">Automotive · YouTube</div><div class="cr-desc">Scalable workflows and thumbnail tests.</div></div><div><div class="cr-stat">2.3M</div><div class="cr-stat-l">Subscribers</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Donya Dadrasan</div><div class="cr-type">Music · Instagram</div><div class="cr-desc">Cover art and promotional posters.</div></div><div><div class="cr-stat">3M+</div><div class="cr-stat-l">Followers</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Erfan Paydar</div><div class="cr-type">Iranian Hip-Hop</div><div class="cr-desc">Thumbnails and graphic elements.</div></div><div><div class="cr-stat">2.2M</div><div class="cr-stat-l">Followers</div></div></div>
+        <div class="client-row"><div><div class="cr-name">Gdaal</div><div class="cr-type">Music</div><div class="cr-desc">Logo and visual identity.</div></div><div><div class="cr-stat">840K+</div><div class="cr-stat-l">Followers</div></div></div>
       </div></div>
-      <div><div class="dm-row"><div class="dm-key">Projects</div><div class="dm-val">1,000+</div></div><div class="dm-row"><div class="dm-key">Deliverables</div><div class="dm-val">Thumbnails · Posters · Cover Art · Logos · Print</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Photoshop · Illustrator · Lightroom</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div><div class="dm-row"><div class="dm-key">Views</div><div class="dm-val">169M+</div></div></div>
+      <div><div class="dm-row"><div class="dm-key">Projects</div><div class="dm-val">1,500+</div></div><div class="dm-row"><div class="dm-key">Deliverables</div><div class="dm-val">Thumbnails · A/B Testing · Cover Art · Batch Retouching</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Photoshop · Illustrator · AI Generation</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div><div class="dm-row"><div class="dm-key">Performance</div><div class="dm-val">5% to 7% Avg CTR</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-motion"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">Video Editing &amp; Compositing</div><div class="detail-desc"><p>Executing clean audio post-production, multi-layered motion graphics, and advanced visual effects compositing for rapid-pacing social media assets. Experience includes developing high-performing content blueprints for vertical formats and supervising specialized promotional campaigns.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell" href="https://www.behance.net/gallery/214164997" target="_blank">View Fine Arts Motion Graphic <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/gallery/214157525" target="_blank">View Videography Samples <span class="cta-arr">&#8599;</span></a>
+      </div></div>
+      <div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Premiere Pro · After Effects · DaVinci Resolve · Final Cut Pro</div></div><div class="dm-row"><div class="dm-key">Clients</div><div class="dm-val">Mobonews (2M+) · Pixie Farnaz · Various</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div></div>
+    </div></div></div>
+
+    <div class="detail-panel" id="p-3d"><div class="dp-inner"><div class="detail-inner">
+      <div><div class="detail-label">3D Animation &amp; Asset Creation</div><div class="detail-desc"><p>Conceptualizing and engineering custom 3D environmental assets, rigid body props, and character models. Focused on rendering high-fidelity narrative sequences and dynamic backgrounds for digital gaming networks, specifically stylized for GTA V, Minecraft, and Mafia II.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell" href="https://www.behance.net/gallery/213857667" target="_blank">View Minecraft Animations <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/gallery/214159185" target="_blank">View MakRaven Animation <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell full" href="https://www.behance.net/gallery/214153555" target="_blank">View LEGO Personal Project <span class="cta-arr">&#8599;</span></a>
+      </div></div>
+      <div><div class="dm-row"><div class="dm-key">Franchises</div><div class="dm-val">Grand Theft Auto V · Minecraft · Mafia II</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Blender · Maya · 3ds Max · Mine-imator</div></div><div class="dm-row"><div class="dm-key">Output</div><div class="dm-val">10+ animations and custom assets</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2022 – Present</div></div></div>
     </div></div></div>
 
     <div class="detail-panel" id="p-film"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">Film &amp; Editing</div><div class="detail-desc"><p>Three short films, different roles each time. Every cut is a decision about what the viewer feels next, not just what they see. Color grading is part of the storytelling.</p></div>
-      <div class="cta-grid"><a class="cta-cell full" href="https://www.behance.net/gallery/214767687" target="_blank">In Proximity — Editing &amp; Poster <span class="cta-arr">&#8599;</span></a><a class="cta-cell full" href="https://www.behance.net/gallery/214157525" target="_blank">Videography &amp; Film Stills <span class="cta-arr">&#8599;</span></a></div>
+      <div><div class="detail-label">Film Direction &amp; Operation</div><div class="detail-desc"><p>Operating specialized mirrorless and DSLR camera configurations across cinematic short narratives, live events, and commercial sets. Synchronizing efforts with lighting technicians to establish precise visual framing, set continuity, and optimal lens selections.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell full" href="https://www.behance.net/gallery/214767687" target="_blank">View In Proximity Project <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell full" href="https://www.behance.net/gallery/214157525" target="_blank">View Videography Stills <span class="cta-arr">&#8599;</span></a>
+      </div>
       <div class="film-sub-title">Short Films</div>
       <div class="film-rows">
         <div class="film-row"><div class="film-yr">2024</div><div><div class="film-ttl">In Proximity</div><div class="film-role">Editor · Poster · Camera Op</div><div class="film-note">A semi-psychological film. 4x official festival selection.</div></div><span class="fbadge sel">4x Selection</span></div>
@@ -257,50 +296,51 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
       <div><div class="dm-row"><div class="dm-key">Roles</div><div class="dm-val">Editor · Co-Director · Camera Op · Poster Designer</div></div><div class="dm-row"><div class="dm-key">Equipment</div><div class="dm-val">Sony Alpha 7 · Canon EOS 90D · Canon 750D</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Premiere Pro · After Effects · DaVinci Resolve</div></div><div class="dm-row"><div class="dm-key">Festivals</div><div class="dm-val">Lift-Off Global · ARClight · Kalkari · NGO IFF</div></div></div>
     </div></div></div>
 
-    <div class="detail-panel" id="p-3d"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">3D Animation &amp; Renders</div><div class="detail-desc"><p>Minecraft-style worlds for gaming YouTubers: character animation, environment design, cinematic renders. Personal side: a LEGO-style short in Blender and Mecabricks.</p></div>
-      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/213857667" target="_blank">Minecraft Animations <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214159185" target="_blank">MakRaven Animation <span class="cta-arr">&#8599;</span></a><a class="cta-cell full" href="https://www.behance.net/gallery/214153555" target="_blank">LEGO Personal Project <span class="cta-arr">&#8599;</span></a></div></div>
-      <div><div class="dm-row"><div class="dm-key">Clients</div><div class="dm-val">DarkViperAU · PixieFarnazGaming · MakRaven</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Blender · Maya · 3ds Max · Mine-imator · Mecabricks</div></div><div class="dm-row"><div class="dm-key">Output</div><div class="dm-val">10+ animations</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2022 – Present</div></div></div>
-    </div></div></div>
-
-    <div class="detail-panel" id="p-motion"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">Motion &amp; Video Editing</div><div class="detail-desc"><p>Commercial edits, social content, event reels, motion graphics. Clients include Mobonews (2M+) and Hamedan's School of Fine Arts.</p></div>
-      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/214164997" target="_blank">Fine Arts Motion Graphic <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214157525" target="_blank">Videography Samples <span class="cta-arr">&#8599;</span></a></div></div>
-      <div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Premiere Pro · After Effects · DaVinci Resolve</div></div><div class="dm-row"><div class="dm-key">Clients</div><div class="dm-val">Mobonews (2M+) · Fine Arts School · Various</div></div><div class="dm-row"><div class="dm-key">Period</div><div class="dm-val">2019 – Present</div></div></div>
-    </div></div></div>
-
     <div class="detail-panel" id="p-personal"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">Independent Projects</div><div class="detail-desc"><p><strong style="font-weight:600">In Search of Art</strong> — what actually makes something great? Interviews cut against cinematic B-roll. Lives on mim.sight.</p><p><strong style="font-weight:600">LEGO Animated Short</strong> — personal film in 3D LEGO style, built in Blender and Mecabricks. On Behance.</p></div>
-      <div class="cta-grid"><a class="cta-cell" href="https://www.youtube.com/@mimsight" target="_blank">mim.sight on YouTube <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/gallery/214153555" target="_blank">LEGO Film on Behance <span class="cta-arr">&#8599;</span></a></div></div>
+      <div><div class="detail-label">Independent Projects</div><div class="detail-desc"><p><strong style="font-weight:600">In Search of Art</strong> | What actually makes something great? Interviews cut against cinematic B-roll. Lives on mim.sight.</p><p><strong style="font-weight:600">LEGO Animated Short</strong> | Personal film in 3D LEGO style, built in Blender and Mecabricks. On Behance.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell" href="https://www.youtube.com/@mimsight" target="_blank">Visit mim.sight Channel <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/gallery/214153555" target="_blank">Watch LEGO Film <span class="cta-arr">&#8599;</span></a>
+      </div></div>
       <div><div class="dm-row"><div class="dm-key">In Search of Art</div><div class="dm-val">Documentary series</div></div><div class="dm-row"><div class="dm-key">LEGO Animated Short</div><div class="dm-val">Blender + Mecabricks · 2024</div></div><div class="dm-row"><div class="dm-key">Channel</div><div class="dm-val">mim.sight (YouTube &amp; Instagram)</div></div></div>
     </div></div></div>
 
     <div class="detail-panel" id="p-photo"><div class="dp-inner"><div class="detail-inner">
-      <div><div class="detail-label">Photography</div><div class="detail-desc"><p>Landscapes and portraits across Iran: the Kavir desert, long-exposure self-portraits, environmental work. Photography changed how I see — that carries into everything else.</p></div>
-      <div class="cta-grid"><a class="cta-cell" href="https://www.behance.net/gallery/213845997" target="_blank">Kavir Photo Collection <span class="cta-arr">&#8599;</span></a><a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">All Photography on Behance <span class="cta-arr">&#8599;</span></a></div></div>
-      <div><div class="dm-row"><div class="dm-key">Equipment</div><div class="dm-val">Sony Alpha 7 · Canon EOS 90D · Canon 750D</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Lightroom · Photoshop</div></div><div class="dm-row"><div class="dm-key">Style</div><div class="dm-val">Landscape · Portrait · Long Exposure · Experimental</div></div></div>
+      <div><div class="detail-label">Photography</div><div class="detail-desc"><p>Selected participant for international competitions including HIPA 2026. Landscapes and portraits across Iran: the Kavir desert, long-exposure self-portraits, and environmental work.</p></div>
+      <div class="cta-grid">
+        <a class="cta-cell" href="https://www.behance.net/gallery/213845997" target="_blank">View Kavir Collection <span class="cta-arr">&#8599;</span></a>
+        <a class="cta-cell" href="https://www.behance.net/mimshad" target="_blank">View All Photography <span class="cta-arr">&#8599;</span></a>
+      </div></div>
+      <div><div class="dm-row"><div class="dm-key">Equipment</div><div class="dm-val">Sony Alpha 7 · Canon EOS 90D · Canon 750D</div></div><div class="dm-row"><div class="dm-key">Tools</div><div class="dm-val">Lightroom · Photoshop</div></div><div class="dm-row"><div class="dm-key">Recognition</div><div class="dm-val">HIPA 2026 Participant</div></div></div>
     </div></div></div>
   </div>
 </section>
 
 <section class="section section-alt" id="background">
   <div class="wrap">
-    <div class="s-tag fade">Education &amp; Background</div>
-    <h2 class="s-h fade">Who I Am &amp;<br>Where I Come From</h2>
+    <div class="s-tag fade">Executive Background</div>
+    <h2 class="s-h fade">Precision &amp;<br>Pipeline Mastery</h2>
     <div class="bg-grid fade">
       <div class="about-text">
-        <p>I'm a multidisciplinary artist from Iran. Graphic design, filmmaking, 3D animation, photography, video editing: five years of building across all of it, with one consistent thread. Every frame, every cut, every composition is a decision about what to say and how to say it.</p>
-        <p>I studied drama at the Fine Arts School of Hamedan — not the obvious background for a designer, but it's where I learned to think about an audience: what they feel, not just what they see. That instinct shapes everything I make.</p>
-        <p>Currently admitted to <strong>NHL Stenden University (Communication &amp; Multimedia Design)</strong> in the Netherlands, working toward becoming an art director and creative lead.</p>
+        <img src="profile.jpg" alt="MohammadMahdi Shadegan" class="prof-img">
+        <p>I am a multidisciplinary visual strategist and B2B service provider managing high-volume creative workflows for prominent international clients. Over the last five years, I have built highly scalable pipelines across graphic design, video editing, and 3D asset creation for creators with millions of subscribers.</p>
+        <p>I operate at the intersection of technical precision and artistic vision. By engineering scalable digital asset workflows and integrating advanced AI models, I have successfully improved end-to-end delivery speeds by 35% for high-profile clients while maintaining elite visual standards.</p>
+        <p>Currently admitted to <strong>NHL Stenden University (Communication &amp; Multimedia Design)</strong> in the Netherlands, I am dedicated to data-driven creative design that maximizes algorithmic reach and converts viewers into audience loyalty.</p>
+        <p style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+          <strong style="display: block; margin-bottom: 0.5rem; border-bottom: none;">Direct Contact:</strong>
+          <span style="display: block; font-size: 0.8rem; color: var(--dim); margin-bottom: 0.3rem;">Discord: <span style="color: var(--text);">mimshad</span></span>
+          <span style="display: block; font-size: 0.8rem; color: var(--dim); margin-bottom: 0.3rem;">Telegram: <span style="color: var(--text);">miimshad</span></span>
+          <span style="display: block; font-size: 0.8rem; color: var(--dim);">Instagram: <a href="https://instagram.com/mimshad.design" target="_blank" style="color: var(--text); text-decoration: none;">mimshad.design</a></span>
+        </p>
       </div>
       <div>
-        <div class="skills-label">Tools &amp; Software</div>
+        <div class="skills-label">Technical &amp; AI Stack</div>
+        <div class="sk-row"><span class="sk-abbr">AI</span><span class="sk-name">Flux, Firefly, Midjourney</span><span class="sk-cat">Gen</span></div>
         <div class="sk-row"><span class="sk-abbr">Ps</span><span class="sk-name">Photoshop</span><span class="sk-cat">Design</span></div>
         <div class="sk-row"><span class="sk-abbr">Ai</span><span class="sk-name">Illustrator</span><span class="sk-cat">Design</span></div>
-        <div class="sk-row"><span class="sk-abbr">Lr</span><span class="sk-name">Lightroom</span><span class="sk-cat">Photo</span></div>
         <div class="sk-row"><span class="sk-abbr">Pr</span><span class="sk-name">Premiere Pro</span><span class="sk-cat">Video</span></div>
-        <div class="sk-row"><span class="sk-abbr">Ae</span><span class="sk-name">After Effects</span><span class="sk-cat">Motion</span></div>
-        <div class="sk-row"><span class="sk-abbr">Dv</span><span class="sk-name">DaVinci Resolve</span><span class="sk-cat">Color</span></div>
+        <div class="sk-row"><span class="sk-abbr">Dv</span><span class="sk-name">DaVinci Resolve</span><span class="sk-cat">Video</span></div>
+        <div class="sk-row"><span class="sk-abbr">Fc</span><span class="sk-name">Final Cut Pro</span><span class="sk-cat">Video</span></div>
         <div class="sk-row"><span class="sk-abbr">Bln</span><span class="sk-name">Blender</span><span class="sk-cat">3D</span></div>
         <div class="sk-row"><span class="sk-abbr">Mya</span><span class="sk-name">Maya</span><span class="sk-cat">3D</span></div>
         <div class="sk-row"><span class="sk-abbr">3ds</span><span class="sk-name">3ds Max</span><span class="sk-cat">3D</span></div>
@@ -315,24 +355,23 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
     </div>
     <div class="resume-grid fade">
       <div>
-        <div class="r-title">Experience</div>
-        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-design')">Graphic Designer</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Freelance · International Clients</div><div class="r-desc">1,000+ projects. DarkViperAU (1.8M), Donya Dadrasan (3M IG), Erfan Paydar (2M IG).</div></div>
-        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-motion')">Video Editor</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Freelance · Worldwide</div><div class="r-desc">Short films, promos, social content. Mobonews (2M+).</div></div>
-        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-3d')">3D Animator</button><span class="r-date">2022 – Present</span></div><div class="r-sub">Freelance · Gaming YouTube</div><div class="r-desc">10+ animations in Blender, Maya, 3ds Max, and Mine-imator.</div></div>
-        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-film')">Camera Operator</button><span class="r-date">2020 – Present</span></div><div class="r-sub">Freelance · Short Films &amp; Commercials</div><div class="r-desc">Sony Alpha 7, Canon EOS 90D, and Canon 750D.</div></div>
+        <div class="r-title">Professional Experience</div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Founder &amp; Creative Director</span><span class="r-date">May 2026 – Present</span></div><div class="r-sub">Creative Studio LLC</div><div class="r-desc">B2B studio optimizing complex batch production workflows and AI assisted retouching. Improved delivery speeds by 35%.</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-design')">Lead Thumbnail Designer</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Independent Contractor · Global Clients</div><div class="r-desc">1,500+ projects. Daily output for DarkViperAU (2.2M) and Speeed (2.3M). Consistent 5-7% CTR.</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-motion')">Video Editor &amp; Compositor</button><span class="r-date">2019 – Present</span></div><div class="r-sub">Independent Contractor · Worldwide</div><div class="r-desc">Vertical formats, promos, social content. Clients include Mobonews (2M+).</div></div>
+        <div class="r-item"><div class="r-head"><button class="r-name" onclick="jumpToPanel('p-3d')">3D Animator</button><span class="r-date">2022 – Present</span></div><div class="r-sub">Independent Contractor · Gaming Networks</div><div class="r-desc">Custom assets for GTA V, Minecraft, and Mafia II properties.</div></div>
       </div>
       <div>
         <div class="r-title">Education</div>
-        <div class="r-item"><div class="r-head"><span class="r-name-plain">NHL Stenden University</span><span class="r-date">2025</span></div><div class="r-sub">Communication &amp; Multimedia Design · Leeuwarden, NL</div><div class="r-desc">Admitted. Bachelor's programme starting 2025.</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">NHL Stenden University</span><span class="r-date">2026</span></div><div class="r-sub">Communication &amp; Multimedia Design · Leeuwarden, NL</div><div class="r-desc">Admitted. Bachelor's programme starting August 2026.</div></div>
         <div class="r-item"><div class="r-head"><span class="r-name-plain">Hamedan Art School of Fine Arts</span><span class="r-date">2021–2024</span></div><div class="r-sub">Drama · GPA 4.0 (17.96/20)</div><div class="r-desc">Outstanding Student 2022.</div></div>
-        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate — Premiere Pro</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
-        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate — Photoshop</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate | Premiere Pro</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
+        <div class="r-item"><div class="r-head"><span class="r-name-plain">Vocational Certificate | Photoshop</span><span class="r-date">2022</span></div><div class="r-sub">Technical &amp; Vocational University of Iran</div></div>
         <div class="r-title" style="margin-top:1.5rem">Recognition</div>
-        <div class="award-row"><span class="aw-n">01</span><div><div class="aw-name">Lift-Off Global Network Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
-        <div class="award-row"><span class="aw-n">02</span><div><div class="aw-name">ARClight Student Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
-        <div class="award-row"><span class="aw-n">03</span><div><div class="aw-name">Kalkari Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
-        <div class="award-row"><span class="aw-n">04</span><div><div class="aw-name">NGO IFF</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
-        <div class="award-row"><span class="aw-n">05</span><div><div class="aw-name">Outstanding Stage Reading</div><div class="aw-ctx">Hamedan Province · 2022</div></div></div>
+        <div class="award-row"><span class="aw-n">01</span><div><div class="aw-name">HIPA Participant</div><div class="aw-ctx">The Same Second · 2026</div></div></div>
+        <div class="award-row"><span class="aw-n">02</span><div><div class="aw-name">Lift-Off Global Network Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">03</span><div><div class="aw-name">ARClight Student Film Festival</div><div class="aw-ctx">In Proximity · 2024</div></div></div>
+        <div class="award-row"><span class="aw-n">04</span><div><div class="aw-name">Outstanding Stage Reading</div><div class="aw-ctx">Hamedan Province · 2022</div></div></div>
       </div>
     </div>
   </div>
@@ -341,13 +380,13 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
 <section class="section" id="contact">
   <div class="wrap">
     <div class="contact-head fade">
-      <h2 class="contact-h">Let's make<br>something<br>worth seeing.</h2>
-      <p class="contact-sub">Open for conversations about graphic design, film, and creative work. Available internationally.</p>
+      <h2 class="contact-h">Let's build<br>something<br>that converts.</h2>
+      <p class="contact-sub">Open for conversations regarding thumbnail strategy, B2B digital operations, and creative execution.</p>
     </div>
     <div class="contact-body fade">
       <div class="c-email-cell">
         <a class="c-link" href="mailto:mohd.mahdi.shdgn@gmail.com">
-          <div><div class="c-lbl">Email</div><div class="c-val"><span class="__cf_email__" data-cfemail="137e7c7b773d7e727b777a3d607b77747d53747e727a7f3d707c7e">[email&#160;protected]</span></div></div>
+          <div><div class="c-lbl">Email</div><div class="c-val">mohd.mahdi.shdgn@gmail.com</div></div>
           <span class="c-arr">&#8599;</span>
         </a>
       </div>
@@ -365,7 +404,7 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
   <span class="links-bar-label">Find me on</span>
   <div class="links-grid-outer"><div class="links-grid">
     <a class="link-cell" href="https://www.behance.net/mimshad" target="_blank"><svg viewBox="0 0 24 24"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.2.509 1.86 1.305 2.33.483.29 1.071.39 1.68.27.692-.14 1.14-.5 1.38-1.17h2.39zM16.05 13.5h3.44c-.08-1.174-.58-1.69-1.64-1.69-.947 0-1.55.516-1.8 1.69zM9.348 8.455c-.703 0-1.136.31-1.136.9 0 .494.268.8.803.978l1.031.322c1.184.37 1.742.987 1.742 2.076 0 1.59-1.11 2.37-3.14 2.37-.584 0-1.204-.109-1.86-.327A5.1 5.1 0 0 1 5 14.3v-1.73c.438.319.912.57 1.42.755.508.184 1.005.276 1.49.276.772 0 1.158-.26 1.158-.78 0-.461-.278-.738-.833-.831L7.2 11.682c-1.15-.362-1.724-.978-1.724-1.85 0-1.497 1.101-2.272 3.004-2.272.537 0 1.064.08 1.58.24.516.16.972.39 1.368.69v1.636c-.4-.27-.832-.49-1.295-.66-.464-.17-.924-.255-1.385-.255z"/></svg><div class="lc-bot"><span>Behance</span><span class="lc-arr">&#8599;</span></div></a>
-    <a class="link-cell" href="https://www.instagram.com/mim.shad" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg><div class="lc-bot"><span>Instagram</span><span class="lc-arr">&#8599;</span></div></a>
+    <a class="link-cell" href="https://www.instagram.com/mimshad.design" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg><div class="lc-bot"><span>Instagram</span><span class="lc-arr">&#8599;</span></div></a>
     <a class="link-cell" href="https://www.youtube.com/@mimsight" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg><div class="lc-bot"><span>mim.sight</span><span class="lc-arr">&#8599;</span></div></a>
     <a class="link-cell" href="https://pinterest.com/mimshadart" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg><div class="lc-bot"><span>Pinterest</span><span class="lc-arr">&#8599;</span></div></a>
     <a class="link-cell" href="https://ytjobs.co/talent/profile/45949" target="_blank"><svg viewBox="0 0 24 24"><path d="M21.543 6.498C22 8.28 22 12 22 12s0 3.72-.457 5.502c-.254.985-.997 1.76-1.938 2.022C17.896 20 12 20 12 20s-5.893 0-7.605-.476c-.945-.266-1.687-1.04-1.938-2.022C2 15.72 2 12 2 12s0-3.72.457-5.502c.254-.985.997-1.76 1.938-2.022C6.107 4 12 4 12 4s5.896 0 7.605.476c.945.266 1.687 1.04 1.938 2.022zM10 15.5l6-3.5-6-3.5v7z"/></svg><div class="lc-bot"><span>YTJobs</span><span class="lc-arr">&#8599;</span></div></a>
@@ -373,16 +412,14 @@ footer{border-top:1px solid var(--border);padding:1.2rem var(--gutter);}
   </div></div>
 </div>
 
-<footer><div class="ft-inner"><span class="ft-logo">MIMSHAD</span><span class="ft-copy">MohammadMahdi Shadegan · Visual Storyteller · 2025</span></div></footer>
+<footer><div class="ft-inner"><span class="ft-logo">MIMSHAD</span><span class="ft-copy">MohammadMahdi Shadegan | Visual Strategist | 2026</span></div></footer>
 <script>
-// Cursor glow
 const cg = document.getElementById('cg');
 document.addEventListener('mousemove', e => {
   cg.style.left = e.clientX + 'px';
   cg.style.top = e.clientY + 'px';
 });
 
-// Parallax hero
 const hn = document.getElementById('heroName');
 const ht = document.getElementById('heroTag');
 window.addEventListener('scroll', () => {
@@ -391,7 +428,6 @@ window.addEventListener('scroll', () => {
   if (ht) ht.style.transform = 'translateY(' + (y * .08) + 'px)';
 }, { passive: true });
 
-// Nav scroll state
 const nav = document.getElementById('mainNav');
 let hb = 0;
 function calcHero() {
@@ -405,7 +441,6 @@ window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('load', () => { calcHero(); onScroll(); });
 window.addEventListener('resize', calcHero);
 
-// Staggered card entrance
 const cardGrid = document.getElementById('cardGrid');
 const cardObs = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -419,7 +454,6 @@ const cardObs = new IntersectionObserver(entries => {
 }, { threshold: .1 });
 if (cardGrid) cardObs.observe(cardGrid);
 
-// Counter animation
 function animateCounter(el) {
   const target = parseInt(el.dataset.count);
   const suffix = el.dataset.suffix || '';
@@ -443,7 +477,6 @@ const counterObs = new IntersectionObserver(entries => {
 }, { threshold: .5 });
 document.querySelectorAll('[data-count]').forEach(el => counterObs.observe(el));
 
-// Panel open/close
 window.openPanel = function(id, card) {
   const all = document.querySelectorAll('.disc-card');
   const panels = document.querySelectorAll('.detail-panel');
@@ -466,7 +499,6 @@ window.openPanel = function(id, card) {
   }
 };
 
-// Jump to panel from background section
 window.jumpToPanel = function(id) {
   const card = document.querySelector('[data-panel="' + id + '"]');
   document.querySelectorAll('.disc-card').forEach(c => c.classList.remove('active'));
@@ -483,13 +515,11 @@ window.jumpToPanel = function(id) {
   }
 };
 
-// Toggle client list
 window.toggleClients = function(listId, toggleId) {
   document.getElementById(listId).classList.toggle('visible');
   document.getElementById(toggleId).classList.toggle('open');
 };
 
-// Theme toggle
 window.toggleTheme = function() {
   const html = document.documentElement;
   const btn = document.getElementById('themeToggle');
@@ -498,7 +528,6 @@ window.toggleTheme = function() {
   btn.textContent = isDark ? '☾' : '☀';
 };
 
-// Fade-in on scroll
 const fadeObs = new IntersectionObserver(entries => {
   entries.forEach(x => { if (x.isIntersecting) x.target.classList.add('in'); });
 }, { threshold: .07, rootMargin: '0px 0px -30px 0px' });
